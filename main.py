@@ -1,5 +1,6 @@
 import os
 import telegram
+import ScarletNBA
 
 def webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])

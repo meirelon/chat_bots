@@ -8,7 +8,7 @@ def webhook(request):
                                                           silent=True,
                                                           cache=True), bot)
 
-        if isinstance(update, NoneType):
+        if update is None:
             return "not ok"
 
         chat_id = update.message.chat.id

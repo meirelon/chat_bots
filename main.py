@@ -17,3 +17,5 @@ def webhook(request):
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
             else:
                 bot.sendMessage(chat_id=chat_id, text=update.message.text)
+        except:
+            return "ok"

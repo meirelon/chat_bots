@@ -1,6 +1,5 @@
 import os
 import telegram
-import ScarletNBA
 
 def webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
@@ -12,11 +11,13 @@ def webhook(request):
         if update is None:
             return "not ok"
         try:
+            chat_text = update.message.text
             chat_id = update.message.chat.id
-            if update.message.text.lower() == "what is my name?":
+            if chat_text.lower() == "what is my name?":
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
             else:
-                bot.sendMessage(chat_id=chat_id, text=update.message.text)
+                r = request.post('https://scarlet-labs.appspot.com/test', data={'dk_url':chat_text})
+                bot.sendMessage(chat_id=chat_id, text=r)
         except:
             return "ok"

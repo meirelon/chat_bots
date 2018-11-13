@@ -17,6 +17,7 @@ def webhook(request):
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
             else:
+                bot.sendMessage(chat_id=chat_id, text=chat_text)
                 r = request.post('https://scarlet-labs.appspot.com/optimize', data={'dk_url':chat_text})
                 bot.sendMessage(chat_id=chat_id, text=r)
         except:

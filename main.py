@@ -20,7 +20,7 @@ def webhook(request):
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
                 bot.sendMessage(chat_id=chat_id, text=r.text[0:1000])
 
-            if chat_text.lower() == "what is my name?":
+            elif chat_text.lower() == "what is my name?":
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
 

@@ -1,6 +1,7 @@
 import os
 import requests
 import re
+import csv
 
 import telegram
 
@@ -19,6 +20,16 @@ def webhook(request):
                 bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
                 bot.sendMessage(chat_id=chat_id, text=r.text[0:1000])
+
+                text_output = r.text
+                buff = csv.StringIO(tmp)
+                reader = csv.reader(buff)
+
+                with open("output.csv",'wb') as resultFile:
+                    wr = csv.writer(resultFile, dialect='excel')
+                    wr.writerows(reader)
+
+                bot.sendDocument(chat_id=chat_id, document=open('output.csv', 'rb'))
 
             elif chat_text.lower() == "what is my name?":
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)

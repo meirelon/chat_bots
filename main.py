@@ -20,6 +20,6 @@ def webhook(request):
             else:
                 bot.sendMessage(chat_id=chat_id, text=chat_text)
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', data={'dk_url':chat_text})
-                bot.sendMessage(chat_id=chat_id, text=r)
+                bot.sendMessage(chat_id=chat_id, text=r.text)
         except:
             return "ok"

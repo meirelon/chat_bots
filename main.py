@@ -16,7 +16,7 @@ def webhook(request):
             chat_id = update.message.chat.id
 
             if bool(re.search(string=chat_text.lower(), pattern="draftkings")):
-                bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+                bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
                 bot.sendMessage(chat_id=chat_id, text=r.text[0:1000])
 

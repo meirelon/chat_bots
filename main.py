@@ -1,6 +1,8 @@
 import os
-import telegram
 import requests
+import re
+
+import telegram
 
 def webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
@@ -9,17 +11,20 @@ def webhook(request):
                                                           silent=True,
                                                           cache=True), bot)
 
-        if update is None:
-            return "not ok"
         try:
             chat_text = update.message.text
             chat_id = update.message.chat.id
+
+            if bool(re.search(string=chat_text.lower(), pattern="draftkings")):
+                bot.sendMessage(chat_id=chat_id, text='please wait...')
+                r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
+                bot.sendMessage(chat_id=chat_id, text=r.text[0:1000])
+
             if chat_text.lower() == "what is my name?":
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
+
             else:
-                bot.sendMessage(chat_id=chat_id, text=chat_text)
-                r = requests.post('https://scarlet-labs.appspot.com/optimize', data={'dk_url':chat_text})
-                bot.sendMessage(chat_id=chat_id, text=r.text)
+                bot.sendMessage(chat_id=chat_id, text='try again')
         except:
             return "ok"

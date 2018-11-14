@@ -5,6 +5,16 @@ import csv
 
 import telegram
 
+def write_list_to_file(guest_list, filename):
+    """Write the list to csv file."""
+
+    with open(filename, "w") as outfile:
+        for entries in guest_list:
+            outfile.write(entries)
+            outfile.write("\n")
+
+
+
 def webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
     if request.method == "POST":
@@ -21,13 +31,9 @@ def webhook(request):
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
                 bot.sendMessage(chat_id=chat_id, text=r.text[0:1000])
 
-                text_output = r.text
-                buff = csv.StringIO(tmp)
-                reader = csv.reader(buff)
+                text_output = r.text.split('\n')
 
-                with open("output.csv",'wb') as resultFile:
-                    wr = csv.writer(resultFile, dialect='excel')
-                    wr.writerows(reader)
+                write_list_to_file(text_output, 'output.csv')
 
                 bot.sendDocument(chat_id=chat_id, document=open('output.csv', 'rb'))
 

@@ -29,13 +29,11 @@ def webhook(request):
             if bool(re.search(string=chat_text.lower(), pattern="draftkings")):
                 bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
-                bot.sendMessage(chat_id=chat_id, text=r.text[0:1000])
+                bot.sendMessage(chat_id=chat_id, text=r.text.split('\n')[1])
 
-                text_output = r.text.split('\n')
-
-                write_list_to_file(text_output, 'output.csv')
-
-                bot.sendDocument(chat_id=chat_id, document=open('output.csv', 'rb'))
+                # text_output = r.text.split('\n')
+                # write_list_to_file(text_output, 'output.csv')
+                # bot.sendDocument(chat_id=chat_id, document=open('output.csv', 'rb'))
 
             elif chat_text.lower() == "what is my name?":
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)

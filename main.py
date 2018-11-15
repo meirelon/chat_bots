@@ -1,17 +1,9 @@
 import os
 import requests
 import re
-import csv
+from datetime import datetime
 
 import telegram
-
-def write_list_to_file(guest_list, filename):
-    """Write the list to csv file."""
-
-    with open(filename, "w") as outfile:
-        for entries in guest_list:
-            outfile.write(entries)
-            outfile.write("\n")
 
 
 
@@ -27,13 +19,14 @@ def webhook(request):
             chat_id = update.message.chat.id
 
             if bool(re.search(string=chat_text.lower(), pattern="draftkings")):
+                dk_projections_link = "https://storage.googleapis.com/draftkings_lineups/projections_{partition_date}.csv".format(partition_date = datetime.today().strftime("%Y%m%d"))
                 bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
-                bot.sendMessage(chat_id=chat_id, text=r.text.split('\n')[1])
+                # bot.sendMessage(chat_id=chat_id, text=r.text.split('\n')[1])
+                bot.send_message(chat_id=chat_id,
+                                 text='<b>bold</b> <i>italic</i> <a href="{proj_link}">link</a>.'.format(proj_link=dk_projections_link),
+                                 parse_mode=telegram.ParseMode.HTML)
 
-                # text_output = r.text.split('\n')
-                # write_list_to_file(text_output, 'output.csv')
-                # bot.sendDocument(chat_id=chat_id, document=open('output.csv', 'rb'))
 
             elif chat_text.lower() == "what is my name?":
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)

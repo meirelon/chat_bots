@@ -24,7 +24,7 @@ def webhook(request):
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
                 # bot.sendMessage(chat_id=chat_id, text=r.text.split('\n')[1])
                 bot.send_message(chat_id=chat_id,
-                                 text='<b>bold</b> <i>italic</i> <a href="{proj_link}">link</a>.'.format(proj_link=dk_projections_link),
+                                 text='<a href="{proj_link}">Click here for link to lineups</a>.'.format(proj_link=dk_projections_link),
                                  parse_mode=telegram.ParseMode.HTML)
 
 

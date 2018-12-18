@@ -63,8 +63,8 @@ def webhook(request):
                                     text=beer_recommendation,
                                     parse_mode=telegram.ParseMode.HTML)
                 except:
-                    Exception as e: print(e)
-                    bot.sendMessage(chat_id=chat_id, text="No Beer Match")
+                    Exception as e: bot.sendMessage(chat_id=chat_id, text=e)
+
 
             else:
                 bot.sendMessage(chat_id=chat_id, text='try again')

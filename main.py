@@ -65,7 +65,7 @@ def webhook(request):
             elif bool(re.search(string=chat_text.lower(), pattern="[/]beer")):
                 try:
                     bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-                    beer_name = " ".join(chat_text.split(" ")[1:])
+                    beer_name = " ".join(re.split("\s+", chat_text)[1:])
                     beer_recommendation = get_beer_rec(beer_i_liked=beer_name)
                     bot.sendMessage(chat_id=chat_id,
                                     text=beer_recommendation,

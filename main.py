@@ -59,7 +59,9 @@ def webhook(request):
                 try:
                     beer_name = " ".join(chat_text.split(" ")[1:])
                     beer_recommendation = get_beer_rec(beer_i_liked=beer_name)
-                    bot.sendMessage(chat_id=chat_id, text=beer_recommendation)
+                    bot.sendMessage(chat_id=chat_id,
+                                    text=beer_recommendation,
+                                    parse_mode=telegram.ParseMode.HTML)
                 except:
                     bot.sendMessage(chat_id=chat_id, text="No Beer Match")
 

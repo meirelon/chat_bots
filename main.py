@@ -9,14 +9,14 @@ import numpy as np
 import telegram
 
 
-def get_beer_rec(beer_i_liked):
-    beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)
-    dist_list = [jaccard_dist(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
-    beer_match = np.argmax(dist_list)
-    question = beer_df["beer"][beer_match]
-    answers = [x["rec_beer"] for x in beer_df["recs"][beer_match]]
-    return "The recommendations for:{beer} are the following: {beer_recommendations}".format(beer=question,
-                                                                                            beer_recommendations=", ".join(answers))
+# def get_beer_rec(beer_i_liked):
+#     beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)
+#     dist_list = [jaccard_dist(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
+#     beer_match = np.argmax(dist_list)
+#     question = beer_df["beer"][beer_match]
+#     answers = [x["rec_beer"] for x in beer_df["recs"][beer_match]]
+#     return "The recommendations for:{beer} are the following: {beer_recommendations}".format(beer=question,
+#                                                                                             beer_recommendations=", ".join(answers))
 
 
 

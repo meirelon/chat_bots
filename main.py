@@ -24,7 +24,7 @@ def crypto_webhook(request):
                 try:
                     bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                     bot.sendMessage(chat_id=chat_id,
-                                    text=get_crypto_price(chat_text.split(" ")[1]))
+                                    text=get_crypto_price(chat_text.split(" ")[1].strip()))
                 except Exception as e:
                     bot.sendMessage(chat_id=chat_id, text=str(e))
             else:

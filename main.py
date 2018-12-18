@@ -28,7 +28,7 @@ def crypto_webhook(request):
                 except Exception as e:
                     bot.sendMessage(chat_id=chat_id, text=str(e))
             else:
-                bot.sendMessage(chat_id=chat_id, text=get_crypto_price("please use crypto function")
+                bot.sendMessage(chat_id=chat_id, text=get_crypto_price("please use crypto function"))
 
         except Exception as e:
             bot.sendMessage(chat_id=chat_id, text=str(e))

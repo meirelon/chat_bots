@@ -24,7 +24,7 @@ def get_beer_rec(beer_i_liked):
 #     beer_links = [x["link"] for x in beer_df["recs"][beer_match]]
     beers_and_links = list(zip([x["rec_beer"] for x in beer_df["recs"][beer_match]],
                                [x["link"] for x in beer_df["recs"][beer_match]]))
-    bot_response = "<br>".join(['<a href="{link}">{beer_name}</a>'.format(beer_name=x[0], link="https://beeradvocate.com"+x[1]) for x in beers_and_links])
+    bot_response = ", ".join(['<a href="{link}">{beer_name}</a>'.format(beer_name=x[0], link="https://beeradvocate.com"+x[1]) for x in beers_and_links])
     return "The recommendations for <b>{beer}</b> are the following: {beer_recommendations}".format(beer=question,
                                                                                             beer_recommendations=bot_response)
 

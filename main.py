@@ -29,6 +29,9 @@ def get_beer_rec(beer_i_liked):
                                                                                             beer_recommendations=bot_response)
 
 
+def get_crypto_price(coin):
+    r = requests.get("https://poloniex.com/public?command=returnTicker").json()
+    return str(round(float(r.get("USDT_{coin}".format(coin=coin.upper())).get("last")),2))
 
 def webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
@@ -55,6 +58,7 @@ def webhook(request):
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
 
+            #beer recommendations
             elif bool(re.search(string=chat_text.lower(), pattern="[/]beer")):
                 try:
                     bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
@@ -66,7 +70,14 @@ def webhook(request):
                 except Exception as e:
                     bot.sendMessage(chat_id=chat_id, text=str(e))
 
-
+            #get crypto prices
+            elif bool(re.search(string=chat_text.lower(), pattern="[/]crypto")):
+                try:
+                    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+                    bot.sendMessage(chat_id=chat_id,
+                                    text=get_crypto_price(chat_text))
+                except Exception as e:
+                    bot.sendMessage(chat_id=chat_id, text=str(e))
 
             else:
                 bot.sendMessage(chat_id=chat_id, text='try again')

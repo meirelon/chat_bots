@@ -28,7 +28,6 @@ def get_beer_rec(beer_i_liked):
     return "The recommendations for <b>{beer}</b> are the following: {beer_recommendations}".format(beer=question,
                                                                                             beer_recommendations=bot_response)
 
-
 def get_crypto_price(coin):
     r = requests.get("https://poloniex.com/public?command=returnTicker").json()
     return str(round(float(r.get("USDT_{coin}".format(coin=coin.upper())).get("last")),2))
@@ -75,7 +74,7 @@ def webhook(request):
                 try:
                     bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                     bot.sendMessage(chat_id=chat_id,
-                                    text=get_crypto_price(chat_text))
+                                    text=get_crypto_price(chat_text.split(" ")[1]))
                 except Exception as e:
                     bot.sendMessage(chat_id=chat_id, text=str(e))
 

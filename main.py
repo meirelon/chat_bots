@@ -2,8 +2,21 @@ import os
 import requests
 import re
 from datetime import datetime
+import pandas as pd
+import numpy as np
+
 
 import telegram
+
+
+def get_beer_rec(beer_i_liked):
+    beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)
+    dist_list = [jaccard_dist(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
+    beer_match = np.argmax(dist_list)
+    question = beer_df["beer"][beer_match]
+    answers = [x["rec_beer"] for x in beer_df["recs"][beer_match]]
+    return "The recommendations for:{beer} are the following: {beer_recommendations}".format(beer=question,
+                                                                                            beer_recommendations=", ".join(answers))
 
 
 
@@ -31,6 +44,11 @@ def webhook(request):
             elif chat_text.lower() == "what is my name?":
                 say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
+
+            elif bool(re.search(string=chat_text.lower(), pattern="[/]beer")):
+                beer_name = " ".join(chat_text.split(" ")[1:])
+                beer_recommendation = get_beer_rec(beer_i_liked=beer_name)
+                bot.sendMessage(chat_id=chat_id, text=beer_recommendation)
 
             else:
                 bot.sendMessage(chat_id=chat_id, text='try again')

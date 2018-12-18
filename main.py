@@ -46,9 +46,12 @@ def webhook(request):
                 bot.sendMessage(chat_id=chat_id, text=say_hello_username)
 
             elif bool(re.search(string=chat_text.lower(), pattern="[/]beer")):
-                beer_name = " ".join(chat_text.split(" ")[1:])
-                beer_recommendation = get_beer_rec(beer_i_liked=beer_name)
-                bot.sendMessage(chat_id=chat_id, text=beer_recommendation)
+                try:
+                    beer_name = " ".join(chat_text.split(" ")[1:])
+                    beer_recommendation = get_beer_rec(beer_i_liked=beer_name)
+                    bot.sendMessage(chat_id=chat_id, text=beer_recommendation)
+                except:
+                    bot.sendMessage(chat_id=chat_id, text="No Beer Match")
 
             else:
                 bot.sendMessage(chat_id=chat_id, text='try again')

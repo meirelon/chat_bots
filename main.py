@@ -2,35 +2,39 @@ import os
 import requests
 import re
 from datetime import datetime
-import pandas as pd
-import numpy as np
 
-
+from utils import jaccard_dist, get_beer_rec, get_crypto_price
 import telegram
 
-def jaccard_dist(a,b):
-    a_split = set(list(a.lower()))
-    b_split = set(list(b.lower()))
-    i = len(a_split.intersection(b_split))
-    u = len(a_split.union(b_split))
-    return i/u
 
-def get_beer_rec(beer_i_liked):
-    beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)
-    dist_list = [jaccard_dist(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
-    beer_match = np.argmax(dist_list)
-    question = beer_df["beer"][beer_match]
-#     answers = [x["rec_beer"] for x in beer_df["recs"][beer_match]]
-#     beer_links = [x["link"] for x in beer_df["recs"][beer_match]]
-    beers_and_links = list(zip([x["rec_beer"] for x in beer_df["recs"][beer_match]],
-                               [x["link"] for x in beer_df["recs"][beer_match]]))
-    bot_response = ", ".join(['<a href="{link}">{beer_name}</a>'.format(beer_name=x[0], link="https://beeradvocate.com"+x[1]) for x in beers_and_links])
-    return "The recommendations for <b>{beer}</b> are the following: {beer_recommendations}".format(beer=question,
-                                                                                            beer_recommendations=bot_response)
 
-def get_crypto_price(coin):
-    r = requests.get("https://poloniex.com/public?command=returnTicker").json()
-    return str(round(float(r.get("USDT_{coin}".format(coin=coin.upper())).get("last")),2))
+def crypto_webhook(request):
+    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
+    if request.method == "POST":
+        update = telegram.Update.de_json(request.get_json(force=True,
+                                                          silent=True,
+                                                          cache=True), bot)
+
+        try:
+            chat_text = update.message.text
+            chat_id = update.message.chat.id
+
+            #get crypto prices
+            if bool(re.search(string=chat_text.lower(), pattern="[/]crypto")):
+                try:
+                    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+                    bot.sendMessage(chat_id=chat_id,
+                                    text=get_crypto_price(chat_text.split(" ")[1]))
+                except Exception as e:
+                    bot.sendMessage(chat_id=chat_id, text=str(e))
+            else:
+                bot.sendMessage(chat_id=chat_id, text=get_crypto_price("please use crypto function")
+
+        except Exception as e:
+            bot.sendMessage(chat_id=chat_id, text=str(e))
+
+
+
 
 def webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
@@ -66,15 +70,6 @@ def webhook(request):
                     bot.sendMessage(chat_id=chat_id,
                                     text=beer_recommendation,
                                     parse_mode=telegram.ParseMode.HTML)
-                except Exception as e:
-                    bot.sendMessage(chat_id=chat_id, text=str(e))
-
-            #get crypto prices
-            elif bool(re.search(string=chat_text.lower(), pattern="[/]crypto")):
-                try:
-                    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-                    bot.sendMessage(chat_id=chat_id,
-                                    text=get_crypto_price(chat_text.split(" ")[1]))
                 except Exception as e:
                     bot.sendMessage(chat_id=chat_id, text=str(e))
 

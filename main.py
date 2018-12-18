@@ -21,7 +21,7 @@ def get_beer_rec(beer_i_liked):
     beer_match = np.argmax(dist_list)
     question = beer_df["beer"][beer_match]
     answers = [x["rec_beer"] for x in beer_df["recs"][beer_match]]
-    return "The recommendations for:{beer} are the following: {beer_recommendations}".format(beer=question,
+    return "The recommendations for {beer} are the following: {beer_recommendations}".format(beer=question,
                                                                                             beer_recommendations=", ".join(answers))
 
 

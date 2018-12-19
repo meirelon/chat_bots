@@ -3,7 +3,7 @@ import requests
 import re
 from datetime import datetime
 
-from utils import jaccard_dist, get_beer_rec, get_crypto_price
+from utils import get_beer_rec, get_crypto_price
 import telegram
 
 

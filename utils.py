@@ -1,12 +1,11 @@
 import requests
 import pandas as pd
-import numpy as np
 from stringMatch import string_match
 
 def get_beer_rec(beer_i_liked):
     beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)
     dist_list = [string_match(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
-    beer_match = np.argmax(dist_list)
+    beer_match = max(enumerate(dist_list),key=lambda item:item[1])[0]
     question = beer_df["beer"][beer_match]
 #     answers = [x["rec_beer"] for x in beer_df["recs"][beer_match]]
 #     beer_links = [x["link"] for x in beer_df["recs"][beer_match]]

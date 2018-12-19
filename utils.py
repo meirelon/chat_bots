@@ -1,18 +1,11 @@
 import requests
 import pandas as pd
 import numpy as np
-
-
-def jaccard_dist(a,b):
-    a_split = set(list(a.lower()))
-    b_split = set(list(b.lower()))
-    i = len(a_split.intersection(b_split))
-    u = len(a_split.union(b_split))
-    return i/u
+from stringMatch import string_match
 
 def get_beer_rec(beer_i_liked):
     beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)
-    dist_list = [jaccard_dist(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
+    dist_list = [string_match(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
     beer_match = np.argmax(dist_list)
     question = beer_df["beer"][beer_match]
 #     answers = [x["rec_beer"] for x in beer_df["recs"][beer_match]]

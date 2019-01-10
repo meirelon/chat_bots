@@ -4,8 +4,46 @@ import re
 from datetime import datetime
 
 from utils import get_beer_rec, get_crypto_price
+from loginCredentials import oAuth
 import telegram
 
+
+def insta_webhook(request):
+    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
+    if request.method == "POST":
+        update = telegram.Update.de_json(request.get_json(force=True,
+                                                          silent=True,
+                                                          cache=True), bot)
+    try:
+        chat_text = update.message.text
+        chat_id = update.message.chat.id
+
+        if bool(re.search(string=chat_text.lower(), pattern="[/]login")):
+            bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+            bot.sendMessage(chat_id=chat_id, text="Please input your username:")
+            if request.method == "POST":
+                update = telegram.Update.de_json(request.get_json(force=True,
+                                                                  silent=True,
+                                                                  cache=True), bot)
+                chat_text = update.message.text
+                chat_id = update.message.chat.id
+                username = chat_test
+                bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+                bot.sendMessage(chat_id=chat_id, text="Please input your password:")
+
+                if request.method == "POST":
+                    update = telegram.Update.de_json(request.get_json(force=True,
+                                                                      silent=True,
+                                                                      cache=True), bot)
+                    chat_text = update.message.text
+                    chat_id = update.message.chat.id
+                    password = chat_text
+
+            login_credentials = oAuth(username=username, password=password)
+            u,p,k = login_credentials.encrypt_login()
+        else:
+            bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+            bot.sendMessage(chat_id=chat_id, text="Please try again:")
 
 
 def crypto_webhook(request):

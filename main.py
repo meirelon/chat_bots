@@ -47,7 +47,7 @@ def webhook(request):
             chat_text = update.message.text
             chat_id = update.message.chat.id
 
-            if bool(re.search(string=chat_text.lower(), pattern="draftkings")):
+            if bool(re.search(string=chat_text.lower(), pattern="[/]draftkings")):
                 dk_projections_link = "https://storage.googleapis.com/draftkings_lineups/projections_{partition_date}.csv".format(partition_date = datetime.today().strftime("%Y%m%d"))
                 bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                 r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})

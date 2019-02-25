@@ -50,7 +50,7 @@ def webhook(request):
                 downloaded_file = bot.download_file(file_info.file_path)
                 bot.sendMessage(chat_id=chat_id, text=file_info.file_path)
             except Exception as e:
-                bot.sendMessage(chat_id=chat_id, text=e)
+                bot.sendMessage(chat_id=chat_id, text=str(e))
 
 
 

@@ -3,9 +3,85 @@ import requests
 import re
 from datetime import datetime
 
-from utils import get_beer_rec, get_crypto_price
+from utils import get_beer_rec, get_crypto_price, photo
 from loginCredentials import oAuth
 import telegram
+
+
+def crypto_webhook(request):
+    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
+    if request.method == "POST":
+        update = telegram.Update.de_json(request.get_json(force=True,
+                                                          silent=True,
+                                                          cache=True), bot)
+
+        try:
+            chat_text = update.message.text
+            chat_id = update.message.chat.id
+
+            #get crypto prices
+            if bool(re.search(string=chat_text.lower(), pattern="[/]crypto")):
+                try:
+                    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+                    bot.sendMessage(chat_id=chat_id,
+                                    text=get_crypto_price(re.split("\s+", chat_text)[1]))
+                except Exception as e:
+                    bot.sendMessage(chat_id=chat_id, text=str(e))
+            else:
+                bot.sendMessage(chat_id=chat_id, text=get_crypto_price("please use crypto function"))
+
+        except Exception as e:
+            bot.sendMessage(chat_id=chat_id, text=str(e))
+
+
+def webhook(request):
+    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
+    if request.method == "POST":
+        update = telegram.Update.de_json(request.get_json(force=True,
+                                                          silent=True,
+                                                          cache=True), bot)
+
+        try:
+            chat_id = update.message.chat.id
+            chat_photo = photo(bot=bot, message=update.message)
+            bot.sendMessage(chat_id=chat_id, text=chat_photo)
+        except:
+            print("Did not work")
+
+        try:
+            chat_text = update.message.text
+            chat_id = update.message.chat.id
+
+            if bool(re.search(string=chat_text.lower(), pattern="[/]draftkings")):
+                dk_projections_link = "https://storage.googleapis.com/draftkings_lineups/projections_{partition_date}.csv".format(partition_date = datetime.today().strftime("%Y%m%d"))
+                bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+                r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
+                # bot.sendMessage(chat_id=chat_id, text=r.text.split('\n')[1])
+                bot.send_message(chat_id=chat_id,
+                                 text='<a href="{proj_link}">Click here for link to lineups</a>'.format(proj_link=dk_projections_link),
+                                 parse_mode=telegram.ParseMode.HTML)
+
+
+            elif chat_text.lower() == "what is my name?":
+                say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
+                bot.sendMessage(chat_id=chat_id, text=say_hello_username)
+
+            #beer recommendations
+            elif bool(re.search(string=chat_text.lower(), pattern="[/]beer")):
+                try:
+                    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+                    beer_name = " ".join(re.split("\s+", chat_text)[1:])
+                    beer_recommendation = get_beer_rec(beer_i_liked=beer_name)
+                    bot.sendMessage(chat_id=chat_id,
+                                    text=beer_recommendation,
+                                    parse_mode=telegram.ParseMode.HTML)
+                except Exception as e:
+                    bot.sendMessage(chat_id=chat_id, text=str(e))
+
+            else:
+                bot.sendMessage(chat_id=chat_id, text='try again')
+        except:
+            return "ok"
 
 
 def insta_webhook(request):
@@ -44,74 +120,3 @@ def insta_webhook(request):
         else:
             bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
             bot.sendMessage(chat_id=chat_id, text="Please try again:")
-
-
-def crypto_webhook(request):
-    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
-    if request.method == "POST":
-        update = telegram.Update.de_json(request.get_json(force=True,
-                                                          silent=True,
-                                                          cache=True), bot)
-
-        try:
-            chat_text = update.message.text
-            chat_id = update.message.chat.id
-
-            #get crypto prices
-            if bool(re.search(string=chat_text.lower(), pattern="[/]crypto")):
-                try:
-                    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-                    bot.sendMessage(chat_id=chat_id,
-                                    text=get_crypto_price(re.split("\s+", chat_text)[1]))
-                except Exception as e:
-                    bot.sendMessage(chat_id=chat_id, text=str(e))
-            else:
-                bot.sendMessage(chat_id=chat_id, text=get_crypto_price("please use crypto function"))
-
-        except Exception as e:
-            bot.sendMessage(chat_id=chat_id, text=str(e))
-
-
-
-
-def webhook(request):
-    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
-    if request.method == "POST":
-        update = telegram.Update.de_json(request.get_json(force=True,
-                                                          silent=True,
-                                                          cache=True), bot)
-
-        try:
-            chat_text = update.message.text
-            chat_id = update.message.chat.id
-
-            if bool(re.search(string=chat_text.lower(), pattern="[/]draftkings")):
-                dk_projections_link = "https://storage.googleapis.com/draftkings_lineups/projections_{partition_date}.csv".format(partition_date = datetime.today().strftime("%Y%m%d"))
-                bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-                r = requests.post('https://scarlet-labs.appspot.com/optimize', json={'dk_url':chat_text})
-                # bot.sendMessage(chat_id=chat_id, text=r.text.split('\n')[1])
-                bot.send_message(chat_id=chat_id,
-                                 text='<a href="{proj_link}">Click here for link to lineups</a>'.format(proj_link=dk_projections_link),
-                                 parse_mode=telegram.ParseMode.HTML)
-
-
-            elif chat_text.lower() == "what is my name?":
-                say_hello_username = 'Hello {}'.format(update.message.from_user.first_name)
-                bot.sendMessage(chat_id=chat_id, text=say_hello_username)
-
-            #beer recommendations
-            elif bool(re.search(string=chat_text.lower(), pattern="[/]beer")):
-                try:
-                    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-                    beer_name = " ".join(re.split("\s+", chat_text)[1:])
-                    beer_recommendation = get_beer_rec(beer_i_liked=beer_name)
-                    bot.sendMessage(chat_id=chat_id,
-                                    text=beer_recommendation,
-                                    parse_mode=telegram.ParseMode.HTML)
-                except Exception as e:
-                    bot.sendMessage(chat_id=chat_id, text=str(e))
-
-            else:
-                bot.sendMessage(chat_id=chat_id, text='try again')
-        except:
-            return "ok"

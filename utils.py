@@ -18,3 +18,11 @@ def get_beer_rec(beer_i_liked):
 def get_crypto_price(coin):
     r = requests.get("https://poloniex.com/public?command=returnTicker").json()
     return str(round(float(r.get("USDT_{coin}".format(coin=coin.upper())).get("last")),2))
+
+def photo(bot, message):
+    fileID = message.photo[-1].file_id
+    file_info = bot.get_file(fileID)
+    downloaded_file = bot.download_file(file_info.file_path)
+    return downloaded_file
+    # with open("resources/pics/photo.jpg", 'wb') as new_file:
+    #     new_file.write(downloaded_file)

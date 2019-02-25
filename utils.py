@@ -22,7 +22,4 @@ def get_crypto_price(coin):
 def photo(bot, message):
     fileID = message.photo[-1].file_id
     file_info = bot.get_file(fileID)
-    downloaded_file = bot.download_file(file_info.file_path)
-    return downloaded_file
-    # with open("resources/pics/photo.jpg", 'wb') as new_file:
-    #     new_file.write(downloaded_file)
+    return file_info

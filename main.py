@@ -42,8 +42,6 @@ def webhook(request):
                                                           silent=True,
                                                           cache=True), bot)
 
-        bot.sendMessage(chat_id=update.message.chat.id, text=update.message)
-        # photo_updates = update.photo
         if update.message.photo:
             try:
                 chat_id = update.message.chat.id

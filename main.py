@@ -45,8 +45,8 @@ def webhook(request):
             chat_id = update.message.chat.id
             chat_photo = photo(bot=bot, message=update.message)
             bot.sendMessage(chat_id=chat_id, text=chat_photo)
-        except:
-            print("Did not work")
+        except Exception as e:
+            bot.sendMessage(chat_id=chat_id, text=e)
 
         try:
             chat_text = update.message.text

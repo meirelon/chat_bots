@@ -45,8 +45,10 @@ def webhook(request):
         if update.message.photo:
             try:
                 chat_id = update.message.chat.id
-                # chat_photo = photo(bot=bot, message=update.message.photo)
-                bot.sendMessage(chat_id=chat_id, text="True")
+                fileID = update.message.photo[-1].file_id
+                file_info = bot.get_file(fileID)
+                downloaded_file = bot.download_file(file_info.file_path)
+                bot.sendMessage(chat_id=chat_id, text=file_info.file_path)
             except Exception as e:
                 bot.sendMessage(chat_id=chat_id, text=e)
 

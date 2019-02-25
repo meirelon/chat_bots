@@ -36,17 +36,21 @@ def crypto_webhook(request):
 
 def webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
+
     if request.method == "POST":
+        updates = bot.get_updates()
+        photo_updates = [u.message.photo for u in updates if u.message.photo]
+        if photo_updates:
+            try:
+                chat_id = update.message.chat.id
+                chat_photo = photo(bot=bot, message=updates.message)
+                bot.sendMessage(chat_id=chat_id, text=chat_photo)
+            except Exception as e:
+                bot.sendMessage(chat_id=chat_id, text=e)
+
         update = telegram.Update.de_json(request.get_json(force=True,
                                                           silent=True,
                                                           cache=True), bot)
-
-        try:
-            chat_id = update.message.chat.id
-            chat_photo = photo(bot=bot, message=update.message)
-            bot.sendMessage(chat_id=chat_id, text=chat_photo)
-        except Exception as e:
-            bot.sendMessage(chat_id=chat_id, text=e)
 
         try:
             chat_text = update.message.text

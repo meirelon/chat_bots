@@ -43,12 +43,12 @@ def webhook(request):
                                                           cache=True), bot)
 
         bot.sendMessage(chat_id=update.message.chat.id, text=update.message)
-        # photo_updates = [u.message.photo for u in update if u.message.photo]
-        if photo_updates:
+        # photo_updates = update.photo
+        if update.message.photo:
             try:
                 chat_id = update.message.chat.id
-                chat_photo = photo(bot=bot, message=update.message)
-                bot.sendMessage(chat_id=chat_id, text=chat_photo)
+                # chat_photo = photo(bot=bot, message=update.message.photo)
+                bot.sendMessage(chat_id=chat_id, text="True")
             except Exception as e:
                 bot.sendMessage(chat_id=chat_id, text=e)
 

@@ -120,3 +120,5 @@ def insta_webhook(request):
         else:
             bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
             bot.sendMessage(chat_id=chat_id, text="Please try again:")
+    except:
+        print("Did not work")

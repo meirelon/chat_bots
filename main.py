@@ -47,7 +47,9 @@ def webhook(request):
                 chat_id = update.message.chat.id
                 fileID = update.message.photo[-1].file_id
                 file_info = bot.get_file(fileID)
-                bot.sendMessage(chat_id=chat_id, text=file_info.file_path)
+                r = requests.post('https://scarlet-labs.appspot.com/image_detect', json={"photo_link":file_info.file_path})
+                # bot.sendMessage(chat_id=chat_id, text=file_info.file_path)
+                bot.sendMessage(chat_id=chat_id, text=r.text)
             except Exception as e:
                 bot.sendMessage(chat_id=chat_id, text=str(e))
 

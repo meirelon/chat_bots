@@ -22,7 +22,15 @@ def get_vision_request(key, bucket_path):
             {
                 "type" : "FACE_DETECTION",
                 "maxResults" : 1
-            }
+            },
+            {
+                  "type": "LANDMARK_DETECTION",
+                  "maxResults": 1
+            },
+            {
+                  "type": "WEB_DETECTION",
+                  "maxResults": 1
+            },
           ]
         }
       ]

@@ -4,7 +4,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 import spotipy
 
-def get_playlist(clientID, clientSECRET, emotion):
+def get_playlist(clientID, clientSECRET, keyword):
     client_credentials_manager = SpotifyClientCredentials(clientID,clientSECRET)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     """
@@ -17,7 +17,9 @@ def get_playlist(clientID, clientSECRET, emotion):
                 'surprise' : ['shock', 'surprise'],
                 'fear' : ['calm', 'calming', 'relax']}
 
-    keyword = random.choice(emotions[emotion])
+    if keyword in emotions.keys():
+        keyword = random.choice(emotions[keyword])
+
     random_int = random.randint(0, 75)
     playlist_list = sp.search(keyword, limit=10, offset=random_int, type='playlist', market='US')['playlists']['items']
 

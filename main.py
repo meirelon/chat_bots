@@ -53,14 +53,22 @@ def webhook(request):
                 photo_link = file_info.file_path
                 get_image(photo_link)
                 upload_blob(bucket_name=os.environ["GCS_BUCKET"], source_file_name="/tmp/photo.jpg", destination_blob_name="photo.jpg")
+
                 r = get_vision_request(key=os.environ["VISION_API_KEY"], bucket_path=os.environ["GCS_BUCKET"])
-                emotion = get_emotion(r)
+                responses = r.json().get("responses")[0]
+                if any([x == "faceAnnotations" for x in responses.keys()]):
+                    if responses.get("faceAnnotations")[0].get("detectionConfidence") > 0.8:
+                        keyword = get_emotion(r)
+                    else:
+                        keyword = responses.get("webDetection").get("webEntities")[0].get("description")
+                else:
+                    keyword = responses.get("webDetection").get("webEntities")[0].get("description")
 
                 playlist = get_playlist(clientID=os.environ["SPOTIPY_CLIENT_ID"],
                                         clientSECRET=os.environ['SPOTIPY_CLIENT_SECRET'],
-                                        emotion=emotion)
+                                        keyword=keyword)
 
-                full_response = "Here is your {emotion} playlist: {playlist}".format(emotion=emotion, playlist=playlist)
+                full_response = "Here is your {keyword} playlist: {playlist}".format(keyword=keyword, playlist=playlist)
 
                 bot.sendMessage(chat_id=chat_id, text=full_response)
             except Exception as e:

@@ -33,9 +33,9 @@ def get_emotion(r):
     emotions = ["joy", "anger", "sorrow", "surprise"]
     emotion_likelihoods = [r.json().get("responses")[0].get("faceAnnotations")[0].get("{emotion}Likelihood".format(emotion=emotion)) for emotion in emotions]
     emotion_dictionary = dict(zip(emotions, emotion_likelihoods))
+    emotion_list = []
     for k,v in emotion_dictionary.items():
-        emotion_list = []
-        if v in (["VERY_LIKELY","LIKELY", "POSSIBLE"]):
+        if v in (["VERY_LIKELY","LIKELY","POSSIBLE"]):
             emotion_list.append(k)
         if len(emotion_list) > 0:
             return emotion_list[0]

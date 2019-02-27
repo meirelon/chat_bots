@@ -6,7 +6,7 @@ import telegram
 
 #all foos
 from gcloud_utils import upload_blob
-from ImageIO import get_image, get_vision_request, get_emotion
+from ImageIO import get_image, get_vision_request, get_emotion, get_image_keyword
 from utils import get_beer_rec, get_crypto_price
 from loginCredentials import oAuth
 from playlistSearch import get_playlist
@@ -55,14 +55,7 @@ def webhook(request):
                 upload_blob(bucket_name=os.environ["GCS_BUCKET"], source_file_name="/tmp/photo.jpg", destination_blob_name="photo.jpg")
 
                 r = get_vision_request(key=os.environ["VISION_API_KEY"], bucket_path=os.environ["GCS_BUCKET"])
-                responses = r.json().get("responses")[0]
-                if any([x == "faceAnnotations" for x in responses.keys()]):
-                    if responses.get("faceAnnotations")[0].get("detectionConfidence") > 0.8:
-                        keyword = get_emotion(r)
-                    else:
-                        keyword = responses.get("webDetection").get("webEntities")[0].get("description")
-                else:
-                    keyword = responses.get("webDetection").get("webEntities")[0].get("description")
+                keyword = get_image_keyword(r)
 
                 playlist = get_playlist(clientID=os.environ["SPOTIPY_CLIENT_ID"],
                                         clientSECRET=os.environ['SPOTIPY_CLIENT_SECRET'],

@@ -49,3 +49,15 @@ def get_emotion(r):
         return emotion_list[0]
     else:
         return "neutral"
+
+def get_image_keyword(r):
+    responses = r.json().get("responses")[0]
+    if any([x == "faceAnnotations" for x in responses.keys()]):
+        if responses.get("faceAnnotations")[0].get("detectionConfidence") > 0.8:
+            keyword = get_emotion(r)
+        else:
+            # keyword = responses.get("webDetection").get("webEntities")[0].get("description")
+            r.json().get("responses")[0].get("webDetection").get("bestGuessLabels")[0].get("label")
+    else:
+        keyword = responses.get("webDetection").get("webEntities")[0].get("description")
+    return keyword

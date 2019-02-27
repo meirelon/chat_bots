@@ -6,7 +6,7 @@ from datetime import datetime
 from utils import get_beer_rec, get_crypto_price
 from loginCredentials import oAuth
 from gcloud_utils import upload_blob
-from getImage import get_image
+from ImageIO import get_image, get_vision_request, get_emotion
 import telegram
 
 
@@ -53,7 +53,10 @@ def webhook(request):
                 get_image(photo_link)
                 upload_blob(bucket_name=os.environ["GCS_BUCKET"], source_file_name="/tmp/photo.jpg", destination_blob_name="photo.jpg")
 
-                bot.sendMessage(chat_id=chat_id, text="neutral")
+                r = get_vision_request(key=os.environ["VISION_API_KEY"], bucket_path=os.environ["GCS_BUCKET"])
+                emotion = get_emotion(r)
+
+                bot.sendMessage(chat_id=chat_id, text=emotion)
             except Exception as e:
                 bot.sendMessage(chat_id=chat_id, text=str(e))
 

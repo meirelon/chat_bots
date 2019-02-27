@@ -5,6 +5,7 @@ from datetime import datetime
 
 from utils import get_beer_rec, get_crypto_price, get_image_emotion
 from loginCredentials import oAuth
+from gcloud_utils import upload_blob
 
 import telegram
 
@@ -50,12 +51,12 @@ def webhook(request):
                 file_info = bot.get_file(fileID)
                 photo_link = file_info.file_path
 
-                emotion = get_image_emotion(photo_link=str(photo_link),
-                                            image=os.environ["DOCKER_IMAGE"],
-                                            instance=os.environ["GCE_INSTANCE"],
-                                            zone=os.environ["GCE_ZONE"])
+                # emotion = get_image_emotion(photo_link=str(photo_link),
+                #                             image=os.environ["DOCKER_IMAGE"],
+                #                             instance=os.environ["GCE_INSTANCE"],
+                #                             zone=os.environ["GCE_ZONE"])
 
-                bot.sendMessage(chat_id=chat_id, text=emotion)
+                bot.sendMessage(chat_id=chat_id, text="neutral")
             except Exception as e:
                 bot.sendMessage(chat_id=chat_id, text=str(e))
 

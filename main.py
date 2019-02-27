@@ -9,7 +9,7 @@ from gcloud_utils import upload_blob
 from ImageIO import get_image, get_vision_request, get_emotion
 from utils import get_beer_rec, get_crypto_price
 from loginCredentials import oAuth
-from spotipy import get_playlist
+from playlistSearch import get_playlist
 
 def crypto_webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])

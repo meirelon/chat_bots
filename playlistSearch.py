@@ -5,7 +5,7 @@ import spotipy.util as util
 import spotipy
 
 def get_playlist(clientID, clientSECRET, emotion):
-    client_credentials_manager = SpotifyClientCredentials(SPOTIPY_CLIENT_ID,SPOTIPY_CLIENT_SECRET)
+    client_credentials_manager = SpotifyClientCredentials(clientID,clientSECRET)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     """
     Input an emotion and the Spotify API will output a random public playlist accordingly

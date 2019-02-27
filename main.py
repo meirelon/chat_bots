@@ -56,9 +56,6 @@ def webhook(request):
                 r = get_vision_request(key=os.environ["VISION_API_KEY"], bucket_path=os.environ["GCS_BUCKET"])
                 emotion = get_emotion(r)
 
-                SPOTIPY_CLIENT_ID = os.environ["SPOTIPY_CLIENT_ID"]
-                SPOTIPY_CLIENT_SECRET = os.environ['SPOTIPY_CLIENT_SECRET']
-
                 playlist = get_playlist(clientID=os.environ["SPOTIPY_CLIENT_ID"],
                                         clientSECRET=os.environ['SPOTIPY_CLIENT_SECRET'],
                                         emotion=emotion)

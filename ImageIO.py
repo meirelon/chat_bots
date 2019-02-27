@@ -37,7 +37,7 @@ def get_emotion(r):
     for k,v in emotion_dictionary.items():
         if v in (["VERY_LIKELY","LIKELY","POSSIBLE"]):
             emotion_list.append(k)
-        if len(emotion_list) > 0:
-            return emotion_list[0]
-        else:
-            return "neutral"
+    if len(emotion_list) > 0:
+        return emotion_list[0]
+    else:
+        return "neutral"

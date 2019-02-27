@@ -3,6 +3,12 @@ import requests
 import pandas as pd
 from stringMatch import string_match
 
+def list_files(request):
+    root = os.path.dirname(path.abspath(__file__))
+    children = os.listdir(root)
+    files = [c for c in children if os.path.isfile(path.join(root, c))]
+    return 'Files: {}'.format(files)
+
 
 def get_beer_rec(beer_i_liked):
     beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)

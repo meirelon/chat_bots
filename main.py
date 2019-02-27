@@ -3,11 +3,10 @@ import requests
 import re
 from datetime import datetime
 
-from utils import get_beer_rec, get_crypto_price, get_image_emotion
+from utils import get_beer_rec, get_crypto_price
 from loginCredentials import oAuth
 from gcloud_utils import upload_blob
 from getImage import get_image
-
 import telegram
 
 
@@ -52,11 +51,7 @@ def webhook(request):
                 file_info = bot.get_file(fileID)
                 photo_link = file_info.file_path
                 get_image(photo_link)
-
-                # emotion = get_image_emotion(photo_link=str(photo_link),
-                #                             image=os.environ["DOCKER_IMAGE"],
-                #                             instance=os.environ["GCE_INSTANCE"],
-                #                             zone=os.environ["GCE_ZONE"])
+                upload_blob(bucket_name=os.environ["GCS_BUCKET"], source_file_name="/tmp/photo.jpg", destination_blob_name="photo.jpg")
 
                 bot.sendMessage(chat_id=chat_id, text="neutral")
             except Exception as e:

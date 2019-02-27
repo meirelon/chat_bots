@@ -53,6 +53,15 @@ def webhook(request):
                 get_image(photo_link)
                 upload_blob(bucket_name=os.environ["GCS_BUCKET"], source_file_name="/tmp/photo.jpg", destination_blob_name="photo.jpg")
 
+                SPOTIPY_CLIENT_ID = os.environ["SPOTIPY_CLIENT_ID"]
+                SPOTIPY_CLIENT_SECRET = os.environ['SPOTIPY_CLIENT_SECRET']
+
+                playlist = get_playlist(clientID=os.environ["SPOTIPY_CLIENT_ID"],
+                                        clientSECRET=os.environ['SPOTIPY_CLIENT_SECRET'],
+                                        emotion=emotion)
+
+                full_response = "Here is your {emotion} playlist: {playlist}".format(emotion=emotion, playlist=playlist)
+
                 r = get_vision_request(key=os.environ["VISION_API_KEY"], bucket_path=os.environ["GCS_BUCKET"])
                 emotion = get_emotion(r)
 

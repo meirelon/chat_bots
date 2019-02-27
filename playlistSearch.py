@@ -1,15 +1,16 @@
 import os
 import random
-from spotipy.oauth2 import SpotifyClientCredentials
-import spotipy.util as util
+# from spotipy.oauth2 import SpotifyClientCredentials
+# import spotipy.util as util
 import spotipy
 
 def word_to_two(w):
     return " ".join(w.split(" ")[0:2])
 
 def get_playlist(clientID, clientSECRET, keyword):
-    client_credentials_manager = SpotifyClientCredentials(clientID,clientSECRET)
-    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    # client_credentials_manager = SpotifyClientCredentials(clientID,clientSECRET)
+    # sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    sp = spotipy.Spotify()
     """
     Input an emotion and the Spotify API will output a random public playlist accordingly
     """

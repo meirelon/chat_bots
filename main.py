@@ -3,9 +3,8 @@ import requests
 import re
 from datetime import datetime
 
-from utils import get_beer_rec, get_crypto_price, photo
+from utils import get_beer_rec, get_crypto_price, get_image_emotion
 from loginCredentials import oAuth
-from image_util import get_image_emotion
 
 import telegram
 
@@ -56,7 +55,7 @@ def webhook(request):
                                             instance=os.environ["GCE_INSTANCE"],
                                             zone=os.environ["GCE_ZONE"])
 
-                bot.sendMessage(chat_id=chat_id, text=emotion)
+                bot.sendMessage(chat_id=chat_id, text=os.environ["GCE_ZONE"])
             except Exception as e:
                 bot.sendMessage(chat_id=chat_id, text=str(e))
 

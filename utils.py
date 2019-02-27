@@ -1,3 +1,4 @@
+import os
 import requests
 import pandas as pd
 from stringMatch import string_match
@@ -19,7 +20,10 @@ def get_crypto_price(coin):
     r = requests.get("https://poloniex.com/public?command=returnTicker").json()
     return str(round(float(r.get("USDT_{coin}".format(coin=coin.upper())).get("last")),2))
 
-def photo(bot, message):
-    fileID = message.photo[-1].file_id
-    file_info = bot.get_file(fileID)
-    return file_info
+def get_image_emotion(photo_link, image, instance, zone):
+    docker_cmd = "'docker run -e photo_link={photo_link} -e detection_type=face {image}'"
+    docker_cmd_formatted = docker_cmd.format(photo_link=photo_link, image=image)
+    gcloud_cmd = """gcloud compute ssh {instance} --zone {zone} -- """
+    cli = gcloud_cmd.format(instance=instance, zone=zone) + docker_cmd_formatted
+    # return str(os.popen(cli).read().strip())
+    return "neutral"

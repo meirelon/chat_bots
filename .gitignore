@@ -106,3 +106,4 @@ venv.bak/
 
 *.tg
 *.csv
+env.yaml

@@ -4,6 +4,9 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 import spotipy
 
+def word_to_two(w):
+    return " ".join(w.split(" ")[0:2])
+
 def get_playlist(clientID, clientSECRET, keyword):
     client_credentials_manager = SpotifyClientCredentials(clientID,clientSECRET)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -21,7 +24,8 @@ def get_playlist(clientID, clientSECRET, keyword):
         keyword = random.choice(emotions[keyword])
 
     random_int = random.randint(0, 75)
-    playlist_list = sp.search(keyword, limit=10, offset=random_int, type='playlist', market='US')['playlists']['items']
+    keyword_search = word_to_two(keyword)
+    playlist_list = sp.search(keyword_search, limit=10, offset=random_int, type='playlist', market='US')['playlists']['items']
 
     for pl in playlist_list:
         if pl['public'] is None or pl['public'] == True:

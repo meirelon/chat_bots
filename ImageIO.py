@@ -35,7 +35,7 @@ def get_emotion(r):
     emotion_dictionary = dict(zip(emotions, emotion_likelihoods))
     for k,v in emotion_dictionary.items():
         emotion_list = []
-        if v == "VERY_LIKELY":
+        if v in (["VERY_LIKELY","LIKELY", "POSSIBLE"]):
             emotion_list.append(k)
         if len(emotion_list) > 0:
             return emotion_list[0]

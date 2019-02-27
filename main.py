@@ -2,13 +2,14 @@ import os
 import requests
 import re
 from datetime import datetime
-
-from utils import get_beer_rec, get_crypto_price
-from loginCredentials import oAuth
-from gcloud_utils import upload_blob
-from ImageIO import get_image, get_vision_request, get_emotion
 import telegram
 
+#all foos
+from gcloud_utils import upload_blob
+from ImageIO import get_image, get_vision_request, get_emotion
+from utils import get_beer_rec, get_crypto_price
+from loginCredentials import oAuth
+from spotipy import get_playlist
 
 def crypto_webhook(request):
     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])

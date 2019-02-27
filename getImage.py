@@ -5,4 +5,4 @@ from io import BytesIO
 def get_image(url):
     r = requests.get(url)
     img = Image.open(BytesIO(r.content))
-    img.save("photo.jpg")
+    img.save("./tmp/photo.jpg")

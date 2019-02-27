@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 from stringMatch import string_match
 
+
 def get_beer_rec(beer_i_liked):
     beer_df = pd.read_json("https://storage.googleapis.com/beer_recommendations/beer_recommendations.json", lines=True)
     dist_list = [string_match(beer_i_liked, beer) for beer in beer_df["beer"].unique()]
@@ -19,6 +20,12 @@ def get_beer_rec(beer_i_liked):
 def get_crypto_price(coin):
     r = requests.get("https://poloniex.com/public?command=returnTicker").json()
     return str(round(float(r.get("USDT_{coin}".format(coin=coin.upper())).get("last")),2))
+
+def get_image(url):
+    r = requests.get(url)
+    img = Image.open(BytesIO(r.content))
+
+
 
 def get_image_emotion(photo_link, image, instance, zone):
     docker_cmd = "'docker run -e photo_link={photo_link} -e detection_type=face {image}'"

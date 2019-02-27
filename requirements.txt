@@ -1,5 +1,6 @@
 python-telegram-bot==11.1.0
-google-cloud-storage
+cloudstorage
+urllib2
 Pillow>=2.0.0
 requests
 pandas

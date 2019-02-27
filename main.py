@@ -55,7 +55,7 @@ def webhook(request):
                                             instance=os.environ["GCE_INSTANCE"],
                                             zone=os.environ["GCE_ZONE"])
 
-                bot.sendMessage(chat_id=chat_id, text=str(photo_link))
+                bot.sendMessage(chat_id=chat_id, text=emotion)
             except Exception as e:
                 bot.sendMessage(chat_id=chat_id, text=str(e))
 

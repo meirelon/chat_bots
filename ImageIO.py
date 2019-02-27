@@ -57,7 +57,8 @@ def get_image_keyword(r):
             keyword = get_emotion(r)
         else:
             # keyword = responses.get("webDetection").get("webEntities")[0].get("description")
-            keyword = r.json().get("responses")[0].get("webDetection").get("bestGuessLabels")[0].get("label")
+            keyword = responses.get("webDetection").get("bestGuessLabels")[0].get("label")
     else:
-        keyword = responses.get("webDetection").get("webEntities")[0].get("description")
+        # keyword = responses.get("webDetection").get("webEntities")[0].get("description")
+        keyword = responses.get("webDetection").get("bestGuessLabels")[0].get("label")
     return keyword

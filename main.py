@@ -126,7 +126,7 @@ def insta_webhook(request):
                                                                   cache=True), bot)
                 chat_text = update.message.text
                 chat_id = update.message.chat.id
-                username = chat_test
+                # username = chat_test
                 bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                 bot.sendMessage(chat_id=chat_id, text="Please input your password:")
 

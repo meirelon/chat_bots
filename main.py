@@ -27,7 +27,7 @@ def crypto_webhook(request):
                 try:
                     bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
                     bot.sendMessage(chat_id=chat_id,
-                                    text=get_crypto_price(re.split("\s+", '{:,}'.format(chat_text))[1]))
+                                    text=get_crypto_price(re.split("\s+", chat_text)[1]))
                 except Exception as e:
                     say_hello_username = 'Hey {}, try again!'.format(update.message.from_user.first_name)
                     bot.sendMessage(chat_id=chat_id, text=say_hello_username)
@@ -108,41 +108,41 @@ def webhook(request):
             return "ok"
 
 
-def insta_webhook(request):
-    bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
-    if request.method == "POST":
-        update = telegram.Update.de_json(request.get_json(force=True,
-                                                          silent=True,
-                                                          cache=True), bot)
-    try:
-        chat_text = update.message.text
-        chat_id = update.message.chat.id
+# def insta_webhook(request):
+#     bot = telegram.Bot(token=os.environ["TELEGRAM_TOKEN"])
+#     if request.method == "POST":
+#         update = telegram.Update.de_json(request.get_json(force=True,
+#                                                           silent=True,
+#                                                           cache=True), bot)
+#     try:
+#         chat_text = update.message.text
+#         chat_id = update.message.chat.id
 
-        if bool(re.search(string=chat_text.lower(), pattern="[/]login")):
-            bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-            bot.sendMessage(chat_id=chat_id, text="Please input your username:")
-            if request.method == "POST":
-                update = telegram.Update.de_json(request.get_json(force=True,
-                                                                  silent=True,
-                                                                  cache=True), bot)
-                chat_text = update.message.text
-                chat_id = update.message.chat.id
-                # username = chat_test
-                bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-                bot.sendMessage(chat_id=chat_id, text="Please input your password:")
+#         if bool(re.search(string=chat_text.lower(), pattern="[/]login")):
+#             bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+#             bot.sendMessage(chat_id=chat_id, text="Please input your username:")
+#             if request.method == "POST":
+#                 update = telegram.Update.de_json(request.get_json(force=True,
+#                                                                   silent=True,
+#                                                                   cache=True), bot)
+#                 chat_text = update.message.text
+#                 chat_id = update.message.chat.id
+#                 # username = chat_test
+#                 bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+#                 bot.sendMessage(chat_id=chat_id, text="Please input your password:")
 
-                if request.method == "POST":
-                    update = telegram.Update.de_json(request.get_json(force=True,
-                                                                      silent=True,
-                                                                      cache=True), bot)
-                    chat_text = update.message.text
-                    chat_id = update.message.chat.id
-                    password = chat_text
+#                 if request.method == "POST":
+#                     update = telegram.Update.de_json(request.get_json(force=True,
+#                                                                       silent=True,
+#                                                                       cache=True), bot)
+#                     chat_text = update.message.text
+#                     chat_id = update.message.chat.id
+#                     password = chat_text
 
-            login_credentials = oAuth(username=username, password=password)
-            u,p,k = login_credentials.encrypt_login()
-        else:
-            bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-            bot.sendMessage(chat_id=chat_id, text="Please try again:")
-    except:
-        print("Did not work")
+#             login_credentials = oAuth(username=username, password=password)
+#             u,p,k = login_credentials.encrypt_login()
+#         else:
+#             bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+#             bot.sendMessage(chat_id=chat_id, text="Please try again:")
+#     except:
+#         print("Did not work")
